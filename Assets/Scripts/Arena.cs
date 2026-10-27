@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,10 @@ public class Arena : MonoBehaviour
     [Header("Settings")]
     public HeroClass heroClass = HeroClass.Warrior;
     public int maxRounds = 10;
+
+    [Header("Visuals")]
+    public UnitVisual heroVisual;
+    public UnitVisual enemyVisual;
 
     private Unit hero;
     private Unit enemy;
@@ -33,11 +38,14 @@ public class Arena : MonoBehaviour
         enemy = enemyPool[Random.Range(0, enemyPool.Count)];
 
         Debug.Log($"Hero: {hero.Name} ({hero.Health} HP) vs {enemy.Name} ({enemy.Health} HP)");
-
-        StartCombat();
     }
 
-    void StartCombat()
+    void Start()
+    {
+        StartCoroutine(StartCombat());
+    }
+
+    IEnumerator StartCombat()
     {
         int round = 1;
 
@@ -45,15 +53,43 @@ public class Arena : MonoBehaviour
         {
             Debug.Log($"Round {round}:");
 
+            yield return new WaitForSeconds(0.5f);
+
+            float heroDirection = 1f;
+            if (heroVisual != null && enemyVisual != null)
+            {
+                heroDirection = Mathf.Sign(enemyVisual.transform.position.x - heroVisual.transform.position.x);
+            }
+
+            if (heroVisual != null) heroVisual.PlayAttackEffect(heroDirection);
+            yield return new WaitForSeconds(0.1f);
+
             int heroDamage = hero.GetRandomDamage();
             enemy.TakeDamage(heroDamage);
             Debug.Log($"{hero.Name} deals {heroDamage} damage, enemy has {enemy.Health} HP");
 
+            if (enemyVisual != null) enemyVisual.PlayHitEffect();
+
             if (enemy.Health <= 0) break;
+
+            yield return new WaitForSeconds(0.5f);
+
+            float enemyDirection = -1f;
+            if (heroVisual != null && enemyVisual != null)
+            {
+                enemyDirection = Mathf.Sign(heroVisual.transform.position.x - enemyVisual.transform.position.x);
+            }
+
+            if (enemyVisual != null) enemyVisual.PlayAttackEffect(enemyDirection);
+            yield return new WaitForSeconds(0.1f);
 
             int enemyDamage = enemy.GetRandomDamage();
             hero.TakeDamage(enemyDamage);
             Debug.Log($"{enemy.Name} deals {enemyDamage} damage, hero has {hero.Health} HP");
+
+            if (heroVisual != null) heroVisual.PlayHitEffect();
+
+            yield return new WaitForSeconds(0.5f);
 
             round++;
         }
