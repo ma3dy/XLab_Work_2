@@ -7,6 +7,7 @@ public class UnitController : MonoBehaviour
     private Animator animator;
     private UnitVisual unitVisual;
     private bool hasHitTrigger;
+    private bool hasAttackTrigger;
 
     private static readonly int AttackHash = Animator.StringToHash("Attack");
     private static readonly int HitHash = Animator.StringToHash("Hit");
@@ -22,10 +23,10 @@ public class UnitController : MonoBehaviour
             foreach (var param in animator.parameters)
             {
                 if (param.nameHash == HitHash && param.type == AnimatorControllerParameterType.Trigger)
-                {
                     hasHitTrigger = true;
-                    break;
-                }
+
+                if (param.nameHash == AttackHash && param.type == AnimatorControllerParameterType.Trigger)
+                    hasAttackTrigger = true;
             }
         }
     }
@@ -38,7 +39,8 @@ public class UnitController : MonoBehaviour
 
     public void PlayAttackAnimation()
     {
-        if (animator != null) animator.SetTrigger(AttackHash);
+        if (animator != null && hasAttackTrigger)
+            animator.SetTrigger(AttackHash);
     }
 
     public void PlayHitReaction()
@@ -46,9 +48,7 @@ public class UnitController : MonoBehaviour
         if (unitVisual != null) unitVisual.PlayHitEffect();
 
         if (animator != null && hasHitTrigger)
-        {
             animator.SetTrigger(HitHash);
-        }
     }
 
     public void PlayDeathReaction()
