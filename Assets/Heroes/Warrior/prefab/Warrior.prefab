@@ -811,8 +811,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4040243442758306}
   - component: {fileID: 95753020919095748}
+  - component: {fileID: 5879909513525544182}
   m_Layer: 0
-  m_Name: character
+  m_Name: Warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -858,6 +859,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5879909513525544182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455100624996608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e651212c8f85b984ebbb0b6bc531981a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitController
 --- !u!1 &1524638891817462
 GameObject:
   m_ObjectHideFlags: 0
