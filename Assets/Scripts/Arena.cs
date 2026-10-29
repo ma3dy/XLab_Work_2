@@ -46,45 +46,38 @@ public class Arena : MonoBehaviour
             Vector3 spawnPos = spawnPoint.position + new Vector3(X_OFFSET * (i % 2) * direction, 0, Z_OFFSET * i);
 
             UnitController instance = Instantiate(prefabs[i], spawnPos, spawnPoint.rotation);
+            string lowerName = prefabs[i].name.ToLower();
 
-            if (!isHero && prefabs[i].name.ToLower().Contains("goblin"))
+            if (!isHero && lowerName.Contains("goblin"))
             {
                 instance.transform.Rotate(0, 180, 0);
             }
 
             string unitName = (isHero ? "Hero " : "Enemy ") + i + " (" + prefabs[i].name + ")";
-            Weapon startWeapon = GetWeaponForCharacter(prefabs[i].name);
-            GameObject startWeaponVisual = GetWeaponPrefabForCharacter(prefabs[i].name);
 
-            Unit unitData = new Unit(unitName, 100, isHero ? 3 : 2, isHero ? 0.3f : 0.1f, startWeapon);
+            (Weapon weapon, GameObject visual) = GetCharacterLoadout(lowerName);
+            Unit unitData = new Unit(unitName, 100, isHero ? 3 : 2, isHero ? 0.3f : 0.1f, weapon);
 
-            instance.Setup(unitData, startWeaponVisual);
+            instance.Setup(unitData, visual);
             activeList.Add(instance);
         }
     }
 
-    private Weapon GetWeaponForCharacter(string prefabName)
+    private (Weapon weapon, GameObject visual) GetCharacterLoadout(string lowerName)
     {
-        string name = prefabName.ToLower();
+        if (lowerName.Contains("goblin")) return (new Weapon("Sword", 15, ElementType.None, 6), goblinSwordPrefab);
+        if (lowerName.Contains("orc")) return (new Weapon("Axe", 25, ElementType.None, 9), orcAxePrefab);
+        if (lowerName.Contains("troll") || lowerName.Contains("foe")) return (new Weapon("Claws", 10, ElementType.None, 0), null);
+        if (lowerName.Contains("wizard") || lowerName.Contains("mage")) return (new Weapon("Staff", 15, ElementType.Fire, 8), null);
+        if (lowerName.Contains("davi") || lowerName.Contains("warrior")) return (new Weapon("Sword", 35, ElementType.Fire, 10), warriorSwordPrefab);
 
-        if (name.Contains("goblin")) return new Weapon("Sword", 15, ElementType.None, 6);
-        if (name.Contains("orc")) return new Weapon("Axe", 25, ElementType.None, 9);
-        if (name.Contains("troll") || name.Contains("foe")) return new Weapon("Claws", 10, ElementType.None, 0);
-        if (name.Contains("wizard") || name.Contains("mage")) return new Weapon("Staff", 15, ElementType.Fire, 8);
-        if (name.Contains("davi") || name.Contains("warrior")) return new Weapon("Sword", 35, ElementType.Fire, 10);
-
-        return new Weapon("Fists", 5, ElementType.None, 0);
+        return (new Weapon("Fists", 5, ElementType.None, 0), null);
     }
 
-    private GameObject GetWeaponPrefabForCharacter(string prefabName)
+    private bool IsWeaponExcluded(string unitName)
     {
-        string name = prefabName.ToLower();
-
-        if (name.Contains("goblin")) return goblinSwordPrefab;
-        if (name.Contains("orc")) return orcAxePrefab;
-        if (name.Contains("davi") || name.Contains("warrior")) return warriorSwordPrefab;
-
-        return null;
+        string lowerName = unitName.ToLower();
+        return lowerName.Contains("mage") || lowerName.Contains("wizard") || lowerName.Contains("troll") || lowerName.Contains("foe");
     }
 
     private IEnumerator CombatLoop()
@@ -142,9 +135,7 @@ public class Arena : MonoBehaviour
 
     private void HandleWeaponDrop(UnitController deadUnit)
     {
-        string deadName = deadUnit.UnitData.Name.ToLower();
-
-        if (deadName.Contains("mage") || deadName.Contains("wizard") || deadName.Contains("troll") || deadName.Contains("foe")) return;
+        if (IsWeaponExcluded(deadUnit.UnitData.Name)) return;
 
         Weapon droppedWeapon = deadUnit.UnitData.EquippedWeapon;
         if (droppedWeapon == null || droppedWeapon.Utility == 0) return;
@@ -164,9 +155,7 @@ public class Arena : MonoBehaviour
     {
         for (int i = 0; i < team.Count; i++)
         {
-            string name = team[i].UnitData.Name.ToLower();
-
-            if (name.Contains("mage") || name.Contains("wizard") || name.Contains("troll") || name.Contains("foe")) continue;
+            if (IsWeaponExcluded(team[i].UnitData.Name)) continue;
 
             if (team[i].UnitData.IsAlive && droppedWeapon.Utility > team[i].UnitData.EquippedWeapon.Utility)
             {

@@ -35,7 +35,7 @@ public class Unit
     {
         int finalDamage = Mathf.Max(1, EquippedWeapon.Damage - target.Armor);
 
-        ElementType targetElement = target.EquippedWeapon != null ? target.EquippedWeapon.Element : ElementType.None;
+        ElementType targetElement = target.EquippedWeapon?.Element ?? ElementType.None;
 
         if (EquippedWeapon.Element != ElementType.None && targetElement != ElementType.None)
         {

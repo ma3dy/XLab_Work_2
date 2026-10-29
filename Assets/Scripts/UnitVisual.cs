@@ -7,6 +7,8 @@ public class UnitVisual : MonoBehaviour
     private Color[] originalColors;
     private Coroutine currentEffectCoroutine;
 
+    private WaitForSeconds hitDelay = new WaitForSeconds(0.2f);
+
     void Awake()
     {
         meshRenderers = GetComponentsInChildren<Renderer>();
@@ -31,7 +33,7 @@ public class UnitVisual : MonoBehaviour
             if (renderer != null) renderer.material.color = new Color(0.3f, 0.3f, 0.3f);
         }
 
-        yield return new WaitForSeconds(0.2f);
+        yield return hitDelay;
 
         for (int i = 0; i < meshRenderers.Length; i++)
         {
