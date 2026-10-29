@@ -163,7 +163,6 @@ Transform:
   - {fileID: 4693307534766684}
   - {fileID: 4546738054750794}
   - {fileID: 4449855642704966}
-  - {fileID: 8853193594700473457}
   m_Father: {fileID: 4114947990077694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1066152937708432
@@ -871,6 +870,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e651212c8f85b984ebbb0b6bc531981a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
+  WeaponHand: {fileID: 4449855642704966}
+  weaponPositionOffset: {x: 0.17, y: 0.15, z: -0.03}
+  weaponRotationOffset: {x: 0, y: 195.031, z: 0}
 --- !u!1 &1524638891817462
 GameObject:
   m_ObjectHideFlags: 0
@@ -2054,65 +2056,3 @@ Transform:
   - {fileID: 4871181161905128}
   m_Father: {fileID: 4593598588675610}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &8853193594700611315
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4046440333440740}
-    m_Modifications:
-    - target: {fileID: 100002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_Name
-      value: DAVI_sword
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.001
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.274
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.074
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9296406
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.04486792
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.027257657
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.36470836
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -3.643
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -4.794
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 42.994
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
---- !u!4 &8853193594700473457 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400002, guid: 6a1119ec10b9d2c46a118f6b426c8aa7, type: 3}
-  m_PrefabInstance: {fileID: 8853193594700611315}
-  m_PrefabAsset: {fileID: 0}

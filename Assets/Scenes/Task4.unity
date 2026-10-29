@@ -188,6 +188,10 @@ MonoBehaviour:
   - {fileID: -8136398979955214184, guid: f3f26804650d6ff4bbb724bb568ae6de, type: 3}
   - {fileID: 1638729289096047927, guid: 146207895c594ce4ab482acd8b7a7cb5, type: 3}
   - {fileID: 6007305838909466329, guid: 999c9df1ae9ff0641a8369f4be6b7ed5, type: 3}
+  mageStaffPrefab: {fileID: 1853494166779514, guid: 713f90f70ef14794bbdcabcb038f4ae7, type: 3}
+  warriorSwordPrefab: {fileID: 1237221023841800, guid: 42b896324e2e47c4bbeba35a3720a8e0, type: 3}
+  goblinSwordPrefab: {fileID: 5661930396888851625, guid: 75045489227247d40975fe507d266340, type: 3}
+  orcAxePrefab: {fileID: 3354186970243878979, guid: 66a708edf5b8ee84890e410a9107cdca, type: 3}
 --- !u!4 &419654263
 Transform:
   m_ObjectHideFlags: 0
