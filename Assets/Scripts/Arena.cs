@@ -21,7 +21,8 @@ public class Arena : MonoBehaviour
     private WaitForSeconds attackDelay = new WaitForSeconds(0.6f);
     private WaitForSeconds turnDelay = new WaitForSeconds(0.5f);
 
-    private const string GoblinPrefabName = "Goblin";
+    private const float X_OFFSET = 2.5f;
+    private const float Z_OFFSET = 4f;
 
     void Start()
     {
@@ -35,27 +36,34 @@ public class Arena : MonoBehaviour
     {
         for (int i = 0; i < prefabs.Count; i++)
         {
-            int col = i % 2;
-            float xOffset = col * 2.5f;
-            float zOffset = i * 4f;
             float direction = isHero ? -1f : 1f;
+            Vector3 spawnPos = spawnPoint.position + new Vector3(X_OFFSET * (i % 2) * direction, 0, Z_OFFSET * i);
 
-            Vector3 spawnPos = spawnPoint.position + new Vector3(xOffset * direction, 0, zOffset);
             UnitController instance = Instantiate(prefabs[i], spawnPos, spawnPoint.rotation);
 
-            if (!isHero && prefabs[i].name.Contains(GoblinPrefabName))
+            if (!isHero && prefabs[i].name.Contains("Goblin"))
             {
                 instance.transform.Rotate(0, 180, 0);
             }
 
             string unitName = (isHero ? "Hero " : "Enemy ") + i + " (" + prefabs[i].name + ")";
-
-            Weapon startWeapon = isHero ? new Weapon("Sword", 20, ElementType.Fire, 10) : new Weapon("Club", 16, ElementType.None, 5);
+            Weapon startWeapon = GetWeaponForCharacter(prefabs[i].name);
             Unit unitData = new Unit(unitName, 100, isHero ? 3 : 2, isHero ? 0.3f : 0.1f, startWeapon);
 
             instance.Setup(unitData);
             activeList.Add(instance);
         }
+    }
+
+    private Weapon GetWeaponForCharacter(string prefabName)
+    {
+        if (prefabName.Contains("Wizard") || prefabName.Contains("Mage")) return new Weapon("Staff", 15, ElementType.Fire, 8);
+        if (prefabName.Contains("DAVI") || prefabName.Contains("Warrior")) return new Weapon("Sword", 35, ElementType.Fire, 10);
+        if (prefabName.Contains("Goblin")) return new Weapon("Sword", 15, ElementType.None, 6);
+        if (prefabName.Contains("Orc")) return new Weapon("Axe", 25, ElementType.None, 9);
+        if (prefabName.Contains("Foe") || prefabName.Contains("Troll")) return new Weapon("Claws", 10, ElementType.None, 0);
+
+        return new Weapon("Fists", 5, ElementType.None, 0);
     }
 
     private IEnumerator CombatLoop()
@@ -101,14 +109,42 @@ public class Arena : MonoBehaviour
 
         int damage = attacker.UnitData.Attack(defender.UnitData);
 
-        Debug.Log($"{attacker.UnitData.Name} hits {defender.UnitData.Name} for {damage} damage. {defender.UnitData.Name} HP: {defender.UnitData.Health}");
+        Debug.Log($"{attacker.UnitData.Name} ({attacker.UnitData.EquippedWeapon.Name}) hits {defender.UnitData.Name} for {damage} damage. {defender.UnitData.Name} HP: {defender.UnitData.Health}");
 
         if (!defender.UnitData.IsAlive)
+        {
             defender.PlayDeathReaction();
+            HandleWeaponDrop(defender);
+        }
         else
+        {
             defender.PlayHitReaction();
+        }
 
         yield return turnDelay;
+    }
+
+    private void HandleWeaponDrop(UnitController deadUnit)
+    {
+        Weapon droppedWeapon = deadUnit.UnitData.EquippedWeapon;
+        if (droppedWeapon == null || droppedWeapon.Utility == 0) return;
+
+        if (TryPickupWeapon(activeHeroes, droppedWeapon, deadUnit.UnitData.Name)) return;
+        TryPickupWeapon(activeEnemies, droppedWeapon, deadUnit.UnitData.Name);
+    }
+
+    private bool TryPickupWeapon(List<UnitController> team, Weapon droppedWeapon, string deadUnitName)
+    {
+        for (int i = 0; i < team.Count; i++)
+        {
+            if (team[i].UnitData.IsAlive && droppedWeapon.Utility > team[i].UnitData.EquippedWeapon.Utility)
+            {
+                Debug.Log($"[DROP] {team[i].UnitData.Name} picked up {droppedWeapon.Name} (Utility: {droppedWeapon.Utility}) from {deadUnitName}!");
+                team[i].UnitData.EquipWeapon(droppedWeapon);
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool HasAliveUnits(List<UnitController> team)
@@ -123,7 +159,6 @@ public class Arena : MonoBehaviour
     private UnitController GetRandomAliveTarget(List<UnitController> team)
     {
         int aliveCount = 0;
-
         for (int i = 0; i < team.Count; i++)
         {
             if (team[i].UnitData.IsAlive) aliveCount++;
@@ -142,7 +177,6 @@ public class Arena : MonoBehaviour
                 currentIndex++;
             }
         }
-
         return null;
     }
 }
