@@ -14,15 +14,6 @@ namespace Game.Task1
         [Header("Критический удар")]
         public float critChance = 0.3f;
 
-        private void Start()
-        {
-            for (int i = 1; i <= 3; i++)
-            {
-                int finalDamage = CalculateDamage(
-                weaponDamage, weaponElement, targetArmor, targetElement, critChance, out string logDetails);
-                Debug.Log($"Удар {i}: {finalDamage} урона {logDetails}");
-            }
-        }
         public static int CalculateDamage(
             int weaponDamage, ElementType weaponElement, int targetArmor, ElementType targetElement, float critChance, out string details)
         {
@@ -57,6 +48,16 @@ namespace Game.Task1
 
             details = $"{elementText}{critText}";
             return currentDamage;
+        }
+
+        private void Start()
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                int finalDamage = CalculateDamage(
+                weaponDamage, weaponElement, targetArmor, targetElement, critChance, out string logDetails);
+                Debug.Log($"Удар {i}: {finalDamage} урона {logDetails}");
+            }
         }
     }
 }
