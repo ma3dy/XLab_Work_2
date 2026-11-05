@@ -1,8 +1,10 @@
 namespace Game.Task1
 {
     public enum ElementType
-    { None,
+    { 
+    None,
     Fire,
     Ice
+
     }
 }
